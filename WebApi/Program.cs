@@ -37,6 +37,11 @@ builder.Services.AddDbContext<FuelDbContext>(Options =>
 });
 var app = builder.Build();
 
+using var scope = app.Services.CreateScope();
+await using var dbContext = scope.ServiceProvider.GetRequiredService<FuelDbContext>();
+await dbContext.Database.MigrateAsync();
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
